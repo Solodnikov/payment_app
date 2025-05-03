@@ -9,7 +9,7 @@ def get_default_due_date() -> timezone.datetime:
     Метод для установления значения поля "срок действия"
     модели Invoice.
     """
-    return timezone.now() + timedelta(days=5)
+    return timezone.now() + timedelta(minutes=1, days=5)
 
 
 class InvoiceStatus(models.TextChoices):

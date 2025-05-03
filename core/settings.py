@@ -106,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
+# TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -121,3 +122,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Celery settings
+# CELERY_BROKER_URL = "redis://localhost:6379/0"
+# CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+# CELERY_ACCEPT_CONTENT = ["json"]
+# CELERY_TASK_SERIALIZER = "json"
+# CELERY_TIMEZONE = "UTC"
+
+# Celery settings dev
+CELERY_BROKER_URL = "memory://"
+CELERY_RESULT_BACKEND = "rpc://"
+CELERY_TASK_ALWAYS_EAGER = True

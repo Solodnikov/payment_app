@@ -12,3 +12,14 @@ python manage.py runserver
 
 ### create superuser
 python manage.py createsuperuser
+
+
+### celery
+для Windows
+celery -A celery_app worker --loglevel=info -P solo
+
+Unix
+celery -A celery_app worker --loglevel=info
+
+### redis
+docker run -d -p 6379:6379 redis
