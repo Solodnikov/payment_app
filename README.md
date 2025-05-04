@@ -23,3 +23,4 @@ celery -A celery_app worker --loglevel=info
 
 ### redis
 docker run -d -p 6379:6379 redis
+docker run -d --name redis -p 6379:6379 redis

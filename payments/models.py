@@ -110,6 +110,21 @@ class PaymentAttempt(models.Model):
         verbose_name = _('Попытка оплаты')
         verbose_name_plural = _('Попытки оплаты')
 
+    def save(self, *args, **kwargs):
+        invoice = self.invoice
+        if invoice.status == InvoiceStatus.EXPIRED:
+            self.status = PaymentAttemptStatus.REJECT
+        elif invoice.status == InvoiceStatus.PENDING:
+            if self.income < invoice.amount:
+                self.status = PaymentAttemptStatus.NOT_ENOUGH
+            else:
+                self.status = PaymentAttemptStatus.SUCCESS
+                invoice.status = InvoiceStatus.PAID
+                invoice.save()
+        else:
+            self.status = PaymentAttemptStatus.REJECT
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return _('Попытка #{id} на {income} руб. cо статусом — {status}'
                  ).format(
