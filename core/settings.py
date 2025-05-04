@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'payments.apps.PaymentsConfig',
+    'unfold',
+    # 'unfold.apps.BasicAppConfig',
+    # 'unfold_admin.apps.UnfoldAdminConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -129,3 +132,9 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
+
+# Unfold admin panel
+UNFOLD = {
+    "SITE_TITLE": "Платежная система",
+    "SITE_HEADER": "Админка (Unfold)",
+}
