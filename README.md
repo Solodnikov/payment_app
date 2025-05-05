@@ -1,14 +1,14 @@
 # payment_app
 
-
 ### check
 
 python manage.py makemigrations
 
 python manage.py migrate
 
-python manage.py runserver
+python manage.py collectstatic
 
+daphne -b 0.0.0.0 -p 8000 core.asgi:application
 
 ### create superuser
 python manage.py createsuperuser
@@ -22,5 +22,4 @@ Unix
 celery -A celery_app worker --loglevel=info
 
 ### redis
-docker run -d -p 6379:6379 redis
 docker run -d --name redis -p 6379:6379 redis
