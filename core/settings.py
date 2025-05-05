@@ -59,7 +59,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            # Your paths
+            BASE_DIR / 'templates'
         ],
         "OPTIONS": {
             "loaders": [

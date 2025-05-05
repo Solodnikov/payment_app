@@ -20,9 +20,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 
-from unfold_admin.sites import new_admin_site
+from unfold_admin.sites import unfold_admin_site
 
 urlpatterns = [
     path("admin/", admin.site.urls),  # default admin
-    path("unfold-admin/", new_admin_site.urls),  # Unfold admin
+    path("unfold-admin/", unfold_admin_site.urls),  # Unfold admin
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
