@@ -31,11 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'payments.apps.PaymentsConfig',
-    'unfold',
-    # 'unfold.apps.BasicAppConfig',
-    # 'unfold_admin.apps.UnfoldAdminConfig',
+    'unfold.apps.BasicAppConfig',
     'django.contrib.admin',
+    'unfold_admin',
+    'payments.apps.PaymentsConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -51,24 +50,32 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'unfold_admin.middleware.CurrentRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            # Your paths
+        ],
+        "OPTIONS": {
+            "loaders": [
+                "unfold_admin.loaders.UnfoldAdminLoader",  # <- New template loader  # noqa
+                "django.template.loaders.filesystem.Loader",
+                "django.template.loaders.app_directories.Loader",
+            ],
+            "context_processors": [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
-    },
+    }
 ]
+
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
@@ -132,9 +139,3 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
-
-# Unfold admin panel
-UNFOLD = {
-    "SITE_TITLE": "Платежная система",
-    "SITE_HEADER": "Админка (Unfold)",
-}
