@@ -7,17 +7,16 @@ from typing import Any, Dict, Tuple
 
 def get_default_due_date() -> timezone.datetime:
     """
-    Метод для установления значения поля "срок действия"
-    модели Invoice.
+    Возвращает дату и время, устанавливаемые по умолчанию
+    в поле 'due_at' счета — через 5 дней от текущего времени.
     """
-    return timezone.now() + timedelta(minutes=1, days=5)
+    return timezone.now() + timedelta(days=5)
 
 
 class InvoiceStatus(models.TextChoices):
     """
-    Модель статуса счета.
+    Перечисление статусов счета.
     """
-
     PENDING = 'pending', _('Ожидает оплаты')
     PAID = 'paid', _('Оплачен')
     EXPIRED = 'expired', _('Просрочен')
@@ -25,9 +24,8 @@ class InvoiceStatus(models.TextChoices):
 
 class PaymentAttemptStatus(models.TextChoices):
     """
-    Модель статуса попытки оплаты.
+    Перечисление возможных результатов попытки оплаты.
     """
-
     SUCCESS = 'success', _('Успешно')
     NOT_ENOUGH = 'not_enough', _('Недостаточно средств')
     REJECT = 'reject', _('Отказано')
@@ -35,27 +33,28 @@ class PaymentAttemptStatus(models.TextChoices):
 
 class Invoice(models.Model):
     """
-    Модель счета.
+    Модель счета на оплату.
+
     Поля:
-    - сумма
-    - дата и время создания
-    - статус
-    - срок действия
+    - amount: сумма счета
+    - created_at: дата и время создания
+    - status: текущий статус счета
+    - due_at: срок действия счета
     """
 
-    amount: models.DecimalField = models.DecimalField(
+    amount = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name=_('Сумма')
     )
-    created_at: models.DateTimeField = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True, verbose_name=_('Дата и время создания')
     )
-    status: models.CharField = models.CharField(
+    status = models.CharField(
         max_length=7,
         choices=InvoiceStatus.choices,
         default=InvoiceStatus.PENDING,
         verbose_name=_('Статус'),
     )
-    due_at: models.DateTimeField = models.DateTimeField(
+    due_at = models.DateTimeField(
         verbose_name=_('Срок действия до'),
         default=get_default_due_date,
     )
@@ -65,6 +64,9 @@ class Invoice(models.Model):
         verbose_name_plural = _('Счета')
 
     def is_expired(self) -> bool:
+        """
+        Проверяет, истек ли срок действия счета.
+        """
         return timezone.now() > self.due_at
 
     def __str__(self) -> str:
@@ -102,6 +104,10 @@ class PaymentAttempt(models.Model):
         verbose_name_plural = _('Попытки оплаты')
 
     def save(self, *args: Tuple, **kwargs: Dict[str, Any]) -> None:
+        """
+        Переопределение метода save для автоматического определения
+        результата попытки оплаты на основе суммы и статуса счета.
+        """
         invoice = self.invoice
         if invoice.status == InvoiceStatus.EXPIRED:
             self.status = PaymentAttemptStatus.REJECT
