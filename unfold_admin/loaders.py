@@ -8,15 +8,15 @@ from unfold_admin.middleware import _thread_data
 
 class UnfoldAdminLoader(FilesystemLoader):
     def _has_unfold_dir(self, template_dir):
-        request = getattr(_thread_data, "request", None)
+        request = getattr(_thread_data, 'request', None)
 
         if not request or request.path in EMPTY_VALUES:
             return False
 
         try:
-            if "admin" in resolve(request.path).namespaces:
+            if 'admin' in resolve(request.path).namespaces:
                 for dir in template_dir.iterdir():
-                    if dir.name == "unfold":
+                    if dir.name == 'unfold':
                         return True
         except Resolver404:
             pass
@@ -26,7 +26,7 @@ class UnfoldAdminLoader(FilesystemLoader):
     def get_dirs(self):
         template_dirs = []
 
-        for template_dir in get_app_template_dirs("templates"):
+        for template_dir in get_app_template_dirs('templates'):
             if not self._has_unfold_dir(template_dir):
                 template_dirs.append(template_dir)
 

@@ -3,54 +3,46 @@ from celery import Celery, signals
 import logging
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
 app = Celery('payment_app')
-app.config_from_object("django.conf:settings", namespace="CELERY")
+app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 
-# Создаем папку для логов
-os.makedirs(os.path.join(BASE_DIR, "logs"), exist_ok=True)
+os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 
-# Настройка логгера
-logger = logging.getLogger("celery.task")
+logger = logging.getLogger('celery.task')
 
 
 @signals.task_prerun.connect
 def task_prerun_handler(task_id, task, *args, **kwargs):
     logger.info(
-        f"Task STARTED: {task.name}[{task_id}]\n"
-        f"Args: {kwargs.get('args')}\n"
-        f"Kwargs: {kwargs.get('kwargs')}"
+        f'Task STARTED: {task.name}[{task_id}]\n'
+        f'Args: {kwargs.get("args")}\n'
+        f'Kwargs: {kwargs.get("kwargs")}'
     )
 
 
 @signals.task_postrun.connect
 def task_postrun_handler(task_id, task, retval, state, *args, **kwargs):
-    if state == "SUCCESS":
-        logger.info(
-            f"Task COMPLETED: {task.name}[{task_id}]\n"
-            f"Result: {retval}"
-        )
+    if state == 'SUCCESS':
+        logger.info(f'Task COMPLETED: {task.name}[{task_id}]\nResult: {retval}')  # noqa
     else:
         logger.error(
-            f"Task FAILED: {task.name}[{task_id}]\n"
-            f"State: {state}\n"
-            f"Result: {retval}"
+            f'Task FAILED: {task.name}[{task_id}]\nState: {state}\nResult: {retval}'  # noqa
         )
 
 
 @signals.task_failure.connect
-def task_failure_handler(sender, task_id, exception, traceback,
-                         args, kwargs, einfo, **kw):
+def task_failure_handler(sender, task_id, exception, traceback, args, kwargs, einfo, **kw):
     logger.error(
-        f"Task CRASHED: {sender.name}[{task_id}]\n"
-        f"Args: {args}\nKwargs: {kwargs}\n"
-        f"Exception: {str(exception)}\n"
-        f"Traceback: {traceback}",
-        exc_info=einfo
+        f'Task CRASHED: {sender.name}[{task_id}]\n'
+        f'Args: {args}\nKwargs: {kwargs}\n'
+        f'Exception: {str(exception)}\n'
+        f'Traceback: {traceback}',
+        exc_info=einfo,
     )

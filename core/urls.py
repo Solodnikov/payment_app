@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
@@ -23,6 +24,6 @@ from django.conf import settings
 from unfold_admin.sites import unfold_admin_site
 
 urlpatterns = [
-    path("admin/", admin.site.urls),  # default admin
-    path("unfold-admin/", unfold_admin_site.urls),  # Unfold admin
+    path('admin/', admin.site.urls),  # default admin
+    path('unfold-admin/', unfold_admin_site.urls),  # Unfold admin
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

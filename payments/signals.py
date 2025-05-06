@@ -7,10 +7,7 @@ from .tasks import expire_invoice
 
 
 @receiver(post_save, sender=Invoice)
-def schedule_expiry_task(
-    sender, instance: Invoice, created: bool, **kwargs
-) -> None:
-
+def schedule_expiry_task(sender, instance: Invoice, created: bool, **kwargs) -> None:  # noqa
     if created and instance.status == InvoiceStatus.PENDING:
         delay = (instance.due_at - timezone.now()).total_seconds()
         expire_invoice.apply_async((instance.id,), countdown=delay)

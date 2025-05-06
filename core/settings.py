@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g3&q*+4jg^vdalpvfu_%e(e2k6y1exz2(r4!an*!il(4pazy_q' # noqa
+SECRET_KEY = 'django-insecure-g3&q*+4jg^vdalpvfu_%e(e2k6y1exz2(r4!an*!il(4pazy_q'  # noqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -58,17 +58,15 @@ ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            BASE_DIR / 'templates'
-        ],
-        "OPTIONS": {
-            "loaders": [
-                "unfold_admin.loaders.UnfoldAdminLoader",  # <- New template loader  # noqa
-                "django.template.loaders.filesystem.Loader",
-                "django.template.loaders.app_directories.Loader",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'OPTIONS': {
+            'loaders': [
+                'unfold_admin.loaders.UnfoldAdminLoader',  # <- New template loader  # noqa
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
             ],
-            "context_processors": [
+            'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -97,16 +95,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', # noqa
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', # noqa
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', # noqa
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', # noqa
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # noqa
     },
 ]
 
@@ -137,11 +135,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Celery settings
-CELERY_BROKER_URL = "redis://localhost:6379/0"
-CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
-CELERY_ACCEPT_CONTENT = ["json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_TIMEZONE = "UTC"
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
 CELERY_WORKER_HIJACK_ROOT_LOGGER = False
 CELERY_WORKER_REDIRECT_STDOUTS = False
 
@@ -151,36 +149,35 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {
-            "format": "[{asctime}] {levelname} {module} {process:d} {message}",
-            "style": "{",
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {module} {process:d} {message}',
+            'style': '{',
         },
     },
-    "handlers": {
-        "celery_file": {
-            "level": "INFO",
-            # "class": "logging.FileHandler",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "when": "midnight",  # каждый день в 00:00
-            "interval": 1,
-            "backupCount": 7,  # хранить 7 дней логов
-            "filename": str(BASE_DIR / "logs" / "celery.log"),
-            "formatter": "verbose",
+    'handlers': {
+        'celery_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 7,
+            'filename': str(BASE_DIR / 'logs' / 'celery.log'),
+            'formatter': 'verbose',
         },
     },
-    "loggers": {
-        "celery": {
-            "handlers": ["celery_file"],
-            "level": "INFO",
-            "propagate": False,
+    'loggers': {
+        'celery': {
+            'handlers': ['celery_file'],
+            'level': 'INFO',
+            'propagate': False,
         },
-        "celery.task": {
-            "handlers": ["celery_file"],
-            "level": "INFO",
-            "propagate": False,
+        'celery.task': {
+            'handlers': ['celery_file'],
+            'level': 'INFO',
+            'propagate': False,
         },
-    }
+    },
 }
