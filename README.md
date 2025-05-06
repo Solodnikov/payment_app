@@ -1,25 +1,90 @@
-# payment_app
+# Payment_app
 
-### check
+Это Django-приложение представляет собой веб-сервер для обработки платёжных транзакций с использованием Celery + Redis для фоновых задач и Daphne. Зависимости управляются через `uv` и определены в `pyproject.toml`.
 
+## Основной функционал
+### Логика работы приложения
+
+- При создании **Счёта на оплату** со статусом **"ожидает оплату"**, автоматически запускается обратный отсчёт до срока оплаты. По истечении срока с помощью Celery-задачи статус счёта меняется на **"просрочен"**.
+  
+- При создании **Попытки оплаты**:
+  - Если связанный счёт находится в статусе **"ожидает оплату"**, но средств недостаточно — статус попытки меняется на **"недостаточно средств"**.
+  - Если условия соблюдены — попытка считается **успешной**, а счёт получает статус **"оплачен"**.
+
+### Интерфейс
+
+Функционал реализутеся через две админки:
+
+- Стандартная Django-админка: http://127.0.0.1:8000/admin/
+- Unfold-админка: http://127.0.0.1:8000/unfold-admin/
+
+Возможности интерфейса:
+
+- Цветовая индикация статусов ("ожидает оплату", "оплачен", "просрочен" и др.)
+- Фильтрация по статусам
+- Блокировка выбора оплаченных и просроченных счётов при создании новой попытки оплаты
+
+## Как запустить проект
+
+### 1. Клонировать проект
+```bash
+git clone https://github.com/Solodnikov/payment_app.git
+```
+### 2. Установить uv 
+
+> Все команды предполагается выполнять из корня проекта
+
+установка uv
+```bash
+pip install uv
+```
+инициализация uv активация виртуального окружения
+```bash
+uv venv
+```
+активация виртуального окружения для windows
+```bash
+source .venv/scripts/activate
+```
+активация виртуального окружения для linux
+```bash
+source .venv/bin/activate
+```
+### 3. Установка зависимостей
+```bash
+uv pip install -r pyproject.toml
+```
+### 4. Запуск redis в докер контейнере
+```bash
+docker run -d --name redis -p 6379:6379 redis
+```
+### 5. Запуск Celery
+
+для Windows
+```bash
+celery -A core.celery_app worker --loglevel=info -P solo
+```
+для linux
+```bash
+celery -A core.celery_app worker --loglevel=info
+```
+### 6. Запуск Django
+```bash
 python manage.py makemigrations
 
 python manage.py migrate
 
 python manage.py collectstatic
 
-daphne -b 0.0.0.0 -p 8000 core.asgi:application
-
-### create superuser
 python manage.py createsuperuser
 
+daphne -b 0.0.0.0 -p 8000 core.asgi:application
+```
 
-### celery
-для Windows
-celery -A core.celery_app worker --loglevel=info -P solo
+### Админки доступны по адресам
 
-Unix
-celery -A core.celery_app worker --loglevel=info
+* Django админка
+http://127.0.0.1:8000/admin/
 
-### redis
-docker run -d --name redis -p 6379:6379 redis
+* Unfold админка
+http://127.0.0.1:8000/unfold-admin/
