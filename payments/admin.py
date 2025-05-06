@@ -11,6 +11,7 @@ class BaseInvoiceAdmin(admin.ModelAdmin):
     Отображает ключевые поля счета, добавляет фильтрацию и поиск,
     а также цветовую метку для отображения статуса.
     """
+
     list_display = ('id', 'amount', 'colored_status', 'created_at', 'due_at')
     list_filter = ('status',)
     search_fields = ('id',)
@@ -52,6 +53,7 @@ class BasePaymentAttemptAdmin(admin.ModelAdmin):
     Отображает данные о попытках оплаты, включая цветовую метку статуса.
     Фильтрует доступные счета при создании попытки.
     """
+
     list_display = ('id', 'invoice', 'income', 'colored_status', 'income_at')
     list_filter = ('status',)
     search_fields = ('id', 'invoice__id')
@@ -97,6 +99,7 @@ class InvoiceAdmin(BaseInvoiceAdmin):
     """
     Регистрация модели Invoice в админке.
     """
+
     pass
 
 
@@ -105,4 +108,5 @@ class PaymentAttemptAdmin(BasePaymentAttemptAdmin):
     """
     Регистрация модели PaymentAttempt в админке.
     """
+
     pass

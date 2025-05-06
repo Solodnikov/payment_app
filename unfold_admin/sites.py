@@ -10,6 +10,7 @@ class NewUnfoldAdminSite(UnfoldAdminSite):
     - site_title — заголовок страницы (тег <title>)
     - index_title — текст приветствия на главной странице админки
     """
+
     site_header = 'Unfold Admin Panel'
     site_title = 'Unfold Admin'
     index_title = 'Добро пожаловать в Unfold админку'

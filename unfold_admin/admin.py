@@ -14,6 +14,7 @@ class InvoiceUnfoldAdmin(BaseInvoiceAdmin, ModelAdmin):
     Наследует всю логику отображения и форматирования
     из BaseInvoiceAdmin, но регистрируется в кастомном интерфейсе Unfold.
     """
+
     pass
 
 
@@ -25,4 +26,5 @@ class PaymentAttemptUnfoldAdmin(BasePaymentAttemptAdmin, ModelAdmin):
     Повторно использует базовую логику отображения и регистрации,
     но в рамках интерфейса Unfold.
     """
+
     pass

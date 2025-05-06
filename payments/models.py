@@ -17,6 +17,7 @@ class InvoiceStatus(models.TextChoices):
     """
     Перечисление статусов счета.
     """
+
     PENDING = 'pending', _('Ожидает оплаты')
     PAID = 'paid', _('Оплачен')
     EXPIRED = 'expired', _('Просрочен')
@@ -26,6 +27,7 @@ class PaymentAttemptStatus(models.TextChoices):
     """
     Перечисление возможных результатов попытки оплаты.
     """
+
     SUCCESS = 'success', _('Успешно')
     NOT_ENOUGH = 'not_enough', _('Недостаточно средств')
     REJECT = 'reject', _('Отказано')
@@ -42,12 +44,8 @@ class Invoice(models.Model):
     - due_at: срок действия счета
     """
 
-    amount = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name=_('Сумма')
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name=_('Дата и время создания')
-    )
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('Сумма'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата и время создания'))
     status = models.CharField(
         max_length=7,
         choices=InvoiceStatus.choices,

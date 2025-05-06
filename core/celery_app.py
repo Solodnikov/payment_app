@@ -52,9 +52,7 @@ def task_postrun_handler(task_id, task, retval, state, *args, **kwargs):
     if state == 'SUCCESS':
         logger.info(f'Task COMPLETED: {task.name}[{task_id}]\nResult: {retval}')
     else:
-        logger.error(
-            f'Task FAILED: {task.name}[{task_id}]\nState: {state}\nResult: {retval}'
-        )
+        logger.error(f'Task FAILED: {task.name}[{task_id}]\nState: {state}\nResult: {retval}')
 
 
 @signals.task_failure.connect
